@@ -27,14 +27,14 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
     let { username, password } = req.body;
-
+    let {cookie} = req.session;
     // search for the user using the username
     Users.findBy({ username })
      .then(([user]) => {
          // if we find the user, then also check that passwords match
          if(user && bcrypt.compareSync(password, user.password)) {
              req.session.loggedIn = true;
-             res.status(200).json({ message: "welcome!" });
+             res.status(200).json({ message: "welcome!", cookie });
          } else {
              res.status(401).json({ message: "You shall not pass!" })
          }
